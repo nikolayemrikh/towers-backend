@@ -1,0 +1,1 @@
+alter table "public"."card_in_tower" add column "is_protected" boolean not null default false;
