@@ -1,6 +1,6 @@
 FROM node:22.14.0-alpine
 
-ENV ALLOWED_ORIGIN
+ARG ALLOWED_ORIGIN
 WORKDIR /src/app/
 
 COPY ./package.json ./package-lock.json /src/app/
