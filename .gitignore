@@ -22,6 +22,7 @@ bitpapa-openapi-3.0.1.yml
 
 # production
 /build
+/dist
 
 # misc
 .DS_Store
