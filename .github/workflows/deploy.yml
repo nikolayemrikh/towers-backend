@@ -1,4 +1,4 @@
-name: Deploy
+name: Deploy SPA
 
 on:
   push:
@@ -10,19 +10,33 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v4
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.DOCKER_ACCESS_TOKEN }}
 
       - name: Build and push image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/api:latest .
-          docker push ${{ secrets.DOCKER_USERNAME }}/api:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/towers-api:latest --build-arg ALLOWED_ORIGIN=${{ secrets.ALLOWED_ORIGIN }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/towers-api:latest
+
+      - name: Deploy to server
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          port: ${{ secrets.SERVER_PORT }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            echo ${{ secrets.DOCKER_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+            docker pull ${{ secrets.DOCKER_USERNAME }}/towers-app:latest
+            cd ~/towers
+            docker compose up -d --force-recreate api
+
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.10
