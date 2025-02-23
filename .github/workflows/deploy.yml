@@ -33,19 +33,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo ${{ secrets.DOCKER_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-            docker pull ${{ secrets.DOCKER_USERNAME }}/towers-app:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/towers-api:latest
             cd ~/towers
             docker compose up -d --force-recreate api
-
-
-      - name: Deploy to server
-        uses: appleboy/ssh-action@v0.1.10
-        with:
-          host: ${{ secrets.SSH_HOST }}
-          port: ${{ secrets.SSH_PORT }}
-          username: ${{ secrets.SSH_USER }}
-          key: ${{ secrets.SSH_PRIVATE_KEY }}
-          script: |
-            docker pull ${{ secrets.DOCKER_USERNAME }}/api:latest
-            cd /opt/docker-compose
-            docker compose up -d --force-recreate api --build-arg ALLOWED_ORIGIN=${{ secrets.ALLOWED_ORIGIN }}
