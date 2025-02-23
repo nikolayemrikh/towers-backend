@@ -21,8 +21,8 @@ jobs:
 
       - name: Build and push image
         run: |
-          docker build -t ${{ secrets.DOCKER_USERNAME }}/towers-api:latest --build-arg ALLOWED_ORIGIN=${{ secrets.ALLOWED_ORIGIN }} .
-          docker push ${{ secrets.DOCKER_USERNAME }}/towers-api:latest
+          docker build -t ${{ secrets.DOCKER_USERNAME }}/towers-backend:latest --build-arg ALLOWED_ORIGIN=${{ secrets.ALLOWED_ORIGIN }} .
+          docker push ${{ secrets.DOCKER_USERNAME }}/towers-backend:latest
 
       - name: Deploy to server
         uses: appleboy/ssh-action@v0.1.10
@@ -33,6 +33,6 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             echo ${{ secrets.DOCKER_ACCESS_TOKEN }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
-            docker pull ${{ secrets.DOCKER_USERNAME }}/towers-api:latest
+            docker pull ${{ secrets.DOCKER_USERNAME }}/towers-backend:latest
             cd ~/towers
             docker compose up -d --force-recreate api
