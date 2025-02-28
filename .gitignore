@@ -46,3 +46,4 @@ next-env.d.ts
 /app/core/api/httpClient/types/__generated__
 .npmrc
 .env
+/src/supabase-db.types.ts

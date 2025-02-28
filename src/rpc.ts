@@ -1,4 +1,5 @@
 import { addUser } from './authenticated/add-user'
+import { useSelectedCard } from './authenticated/use-selected-card'
 import { test } from './test'
 
 type TMethod = (...args: any[]) => Promise<any>
@@ -11,6 +12,7 @@ export const rpcMethods = {
   test1: test,
   authenticated: {
     addUser: addUser,
+    useSelectedCard: useSelectedCard,
   } satisfies Record<string, TAuthenticatedMethod>,
 } satisfies IMethods
 
