@@ -1,4 +1,5 @@
 import { addUser } from './authenticated/add-user'
+import { initializeBoard } from './authenticated/initialize-board'
 import { useSelectedCard } from './authenticated/use-selected-card'
 import { test } from './test'
 
@@ -11,8 +12,9 @@ interface IMethods {
 export const rpcMethods = {
   test1: test,
   authenticated: {
-    addUser: addUser,
-    useSelectedCard: useSelectedCard,
+    addUser,
+    useSelectedCard,
+    initializeBoard,
   } satisfies Record<string, TAuthenticatedMethod>,
 } satisfies IMethods
 
