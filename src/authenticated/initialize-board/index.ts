@@ -1,20 +1,17 @@
 import { Database } from '@/supabase-db.types';
 import { createClient } from '@supabase/supabase-js';
 
-export const initializeBoard = async (token: string): Promise<void> => {  
-    const supabaseClient = createClient<Database>(process.env.SUPABASE_URL!, process.env.SUPABASE_ANON_KEY!, {
-        global: { headers: { Authorization: token } },
-    });
+export const initializeBoard = async (token: string): Promise<void> => {
+  const supabaseClient = createClient<Database>(process.env.SUPABASE_URL!, process.env.SUPABASE_ANON_KEY!, {
+    global: { headers: { Authorization: token } },
+  });
 
-    
-    const supabaseServiceClient = createClient<Database>(
-      process.env.SUPABASE_URL!,
-      process.env.SUPABASE_SERVICE_ROLE_KEY!
-    );
-    
+  const supabaseServiceClient = createClient<Database>(
+    process.env.SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  );
 
-
-  const { data: userData } = await supabaseClient.auth.getUser();  
+  const { data: userData } = await supabaseClient.auth.getUser();
   if (!userData.user) throw new Error('User not found');
 
   const { data: usersInLobby, error: usersInLobbySelectError } = await supabaseServiceClient
@@ -88,4 +85,4 @@ export const initializeBoard = async (token: string): Promise<void> => {
     // @TODO fix this hack
     .neq('id', 321321);
   if (usersInLobbyDeleteError) throw new Error(usersInLobbyDeleteError.message);
-}
+};
